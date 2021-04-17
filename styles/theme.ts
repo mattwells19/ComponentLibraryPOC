@@ -22,6 +22,7 @@ const theme: Theme = {
       default: "#d5d5d5",
     },
   },
+  spacing: (...args: number[]) => args.reduce((prev, curr) => prev.concat(` ${curr * 5}px`).trim(), ""),
 };
 
 export default theme;

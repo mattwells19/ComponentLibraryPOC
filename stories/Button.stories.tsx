@@ -1,38 +1,30 @@
 import { Story, Meta } from "@storybook/react";
+import Box from "../components/Box";
 import Button, { ButtonProps } from "../components/Button";
 import SearchIcon from "./icons/SearchIcon";
 
 const icons = { "None": undefined, "SearchIcon": <SearchIcon fill="currentColor"/> };
 
 const ButtonStory: Story<ButtonProps> = ({ ...args }) => (
-  <Button {...args} />
+  <Box as="main" display="flex" gap="6px">
+    <Button {...args} variant="default">Default</Button>
+    <Button {...args} variant="action">Action</Button>
+    <Button {...args} variant="primary">Primary</Button>
+  </Box>
 );
 export const Default = ButtonStory.bind({});
 Default.args = {
-  variant: "default",
   size: "default",
   disabled: false,
   isLoading: false,
-  children: "Click me!",
   startIcon: undefined,
-  endIcon: undefined
+  endIcon: undefined,
 };
 Default.storyName = "Button";
 
 export default {
   title: 'Button',
-  component: Button,
   argTypes: {
-    variant: {
-      description: "Which of the 3 variants to render.",
-      control: {
-        type: "select",
-        options: ["default", "primary", "action"],
-      },
-      table: {
-        defaultValue: { summary: "default" },
-      }
-    },
     size: {
       description: "Which of the 3 sizes to render.",
       control: {

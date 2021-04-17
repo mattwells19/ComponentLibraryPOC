@@ -19,5 +19,6 @@ declare module "@emotion/react" {
         default: string;
       };
     };
+    spacing: (...args: number[]) => string;
   }
 }

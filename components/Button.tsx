@@ -13,7 +13,7 @@ export interface ButtonComponentProps {
   children: React.ReactNode;
 }
 
-export interface ButtonProps extends ButtonComponentProps, React.CSSProperties {}
+export interface ButtonProps extends ButtonComponentProps, Omit<React.CSSProperties, "translate"> {}
 
 type ButtonStyles = (props: ButtonProps & { theme: Theme }) => CSSObject;
 
@@ -77,19 +77,19 @@ const variant: ButtonStyles = ({ variant, theme }) => {
   }
 };
 
-const sizes: ButtonStyles = ({ size }) => {
+const sizes: ButtonStyles = ({ size, theme }) => {
   switch (size) {
     case "small":
       return {
-        padding: "2.5px 5px"
+        padding: theme.spacing(0.5, 1),
       };
     case "large":
       return {
-        padding: "10px 20px"
+        padding: theme.spacing(2, 4),
       };
     default:
       return {
-        padding: "5px 10px",
+        padding: theme.spacing(1, 2),
       }
   }
 }
@@ -102,6 +102,8 @@ const disabled: ButtonStyles = ({ disabled }) => (
 )
 
 const overrides: ButtonStyles = ({
+  variant,
+  size,
   children,
   theme,
   endIcon,
@@ -122,18 +124,31 @@ const StyledButton = styled.button<ButtonProps>(
   overrides
 );
 
-const StyledIcon = styled.span<{ position: "start" | "end" }>((props) => ({
+const StyledIcon = styled.span({
   display: "flex",
   width: "18px",
-  marginRight: props.position === "start" ? "5px" : "0px",
-  marginLeft: props.position === "end" ? "5px" : "0px",
-}));
+});
+
+const StyledButtonLabel = styled.span<Pick<ButtonComponentProps, "size">>(({ theme, size }) => {
+  let gap = theme.spacing(1);
+  switch (size) {
+    case "small": gap = theme.spacing(0); break;
+    case "large": gap = theme.spacing(3); break;
+  }
+
+  return {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-around",
+    width: "100%",
+    gap,
+  }
+});
 
 const Button: React.FC<ButtonProps> = ({
   startIcon,
   endIcon,
   children,
-  translate,
   variant = "default",
   size = "default",
   isLoading = false,
@@ -142,14 +157,16 @@ const Button: React.FC<ButtonProps> = ({
 }) => {
   return (
     <StyledButton size={size} variant={variant} {...props} disabled={isLoading || disabled}>
-      {isLoading && "Loading..."}
-      {!isLoading && (
-        <>
-          {startIcon && <StyledIcon position="start">{startIcon}</StyledIcon>}
-          {children}
-          {endIcon && <StyledIcon position="end">{endIcon}</StyledIcon>}
-        </>
-      )}
+      <StyledButtonLabel size={size}>
+        {isLoading && "Loading..."}
+        {!isLoading && (
+          <>
+            {startIcon && <StyledIcon>{startIcon}</StyledIcon>}
+            {children}
+            {endIcon && <StyledIcon>{endIcon}</StyledIcon>}
+          </>
+        )}
+      </StyledButtonLabel>
     </StyledButton>
   );
 };
