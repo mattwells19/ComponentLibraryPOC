@@ -1,6 +1,3 @@
-/** @jsxRuntime classic */
-/** @jsx jsx */
-import { jsx, css } from '@emotion/react'
 import styled from "@emotion/styled";
 import { ButtonProps } from "./Button";
 import Box from "./Box";
@@ -18,8 +15,8 @@ ButtonGroupChildrenContext.displayName = "ButtonGroupChildrenContext";
 export const useButtonGroupChildrenContext = (): Partial<ButtonProps> => React.useContext(ButtonGroupChildrenContext);
 
 const ButtonGroup: React.FC<ButtonGroupProps> = ({ children, ...props }) => {
-  const childrenStyles = css({
-    "&:not(:first-child):not(:last-child)": {
+  const childrenStyles = {
+    "&:not(:first-of-type):not(:last-of-type)": {
       borderRadius: 0,
     },
     "&:first-of-type": {
@@ -30,7 +27,7 @@ const ButtonGroup: React.FC<ButtonGroupProps> = ({ children, ...props }) => {
       borderRadius: "0px 3px 3px 0px",
       borderLeft: "none",
     },
-  });
+  };
 
   return (
     <ButtonGroupChildrenContext.Provider value={{ 

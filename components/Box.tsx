@@ -1,13 +1,6 @@
 import styled from "@emotion/styled";
-import { extractCssFromProps } from "../utils/CSSStyles";
-import { ComponentStyles } from "./types";
+import { ExtendedCSSProperties, extractCssFromProps } from "../utils/CSSStyles";
 
-export interface BoxProps extends React.CSSProperties {
-  children: React.ReactNode;
-}
-
-const overrides: ComponentStyles<BoxProps> = (props) => ({ ...extractCssFromProps(props) });
-
-const Box = styled.div(overrides);
+const Box = styled.div<ExtendedCSSProperties>((props) => ({ ...extractCssFromProps(props) }));
 
 export default Box;

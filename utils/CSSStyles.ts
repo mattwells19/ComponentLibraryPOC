@@ -1,11 +1,21 @@
 import { CSSProperties } from "react";
 import theme from "../styles/theme";
 
-// Emotion takes care of the cross-browser support, so only base properties are needed here.
+export interface ExtendedCSSProperties extends Omit<CSSProperties, "translate"> {
+  marginY?: string | number;
+  marginX?: string | number;
+  paddingX?: string | number;
+  paddingY?: string | number;
+}
+
+const CSSExtensionStyles: Array<string> = ["marginY", "marginX", "paddingX", "paddingY"];
+
+// Emotion takes care of the crossBrowser support, so only base properties are needed here.
 const CSSStyles: Array<string> = [
   "alignContent",
   "alignItems",
   "alignSelf",
+  "all",
   "animation",
   "animationDelay",
   "animationDirection",
@@ -18,6 +28,7 @@ const CSSStyles: Array<string> = [
   "backfaceVisibility",
   "background",
   "backgroundAttachment",
+  "backgroundBlendMode",
   "backgroundClip",
   "backgroundColor",
   "backgroundImage",
@@ -59,11 +70,18 @@ const CSSStyles: Array<string> = [
   "borderTopWidth",
   "borderWidth",
   "bottom",
+  "boxDecorationBreak",
   "boxShadow",
   "boxSizing",
+  "breakAfter",
+  "breakBefore",
+  "breakInside",
   "captionSide",
+  "caretColor",
+  "@charset",
   "clear",
   "clip",
+  "clipPath",
   "color",
   "columnCount",
   "columnFill",
@@ -82,6 +100,7 @@ const CSSStyles: Array<string> = [
   "direction",
   "display",
   "emptyCells",
+  "filter",
   "flex",
   "flexBasis",
   "flexDirection",
@@ -91,16 +110,43 @@ const CSSStyles: Array<string> = [
   "flexWrap",
   "float",
   "font",
+  "@fontFace",
   "fontFamily",
+  "fontFeatureSettings",
+  "fontKerning",
   "fontSize",
   "fontSizeAdjust",
   "fontStretch",
   "fontStyle",
   "fontVariant",
+  "fontVariantCaps",
   "fontWeight",
   "gap",
+  "grid",
+  "gridArea",
+  "gridAutoColumns",
+  "gridAutoFlow",
+  "gridAutoRows",
+  "gridColumn",
+  "gridColumnEnd",
+  "gridColumnGap",
+  "gridColumnStart",
+  "gridGap",
+  "gridRow",
+  "gridRowEnd",
+  "gridRowGap",
+  "gridRowStart",
+  "gridTemplate",
+  "gridTemplateAreas",
+  "gridTemplateColumns",
+  "gridTemplateRows",
+  "hangingPunctuation",
   "height",
+  "hyphens",
+  "@import",
+  "isolation",
   "justifyContent",
+  "@keyframes",
   "left",
   "letterSpacing",
   "lineHeight",
@@ -115,8 +161,12 @@ const CSSStyles: Array<string> = [
   "marginTop",
   "maxHeight",
   "maxWidth",
+  "@media",
   "minHeight",
   "minWidth",
+  "mixBlendMode",
+  "objectFit",
+  "objectPosition",
   "opacity",
   "order",
   "outline",
@@ -137,10 +187,13 @@ const CSSStyles: Array<string> = [
   "pageBreakInside",
   "perspective",
   "perspectiveOrigin",
+  "pointerEvents",
   "position",
   "quotes",
   "resize",
   "right",
+  "rowGap",
+  "scrollBehavior",
   "tabSize",
   "tableLayout",
   "textAlign",
@@ -163,6 +216,8 @@ const CSSStyles: Array<string> = [
   "transitionDuration",
   "transitionProperty",
   "transitionTimingFunction",
+  "unicodeBidi",
+  "userSelect",
   "verticalAlign",
   "visibility",
   "whiteSpace",
@@ -170,6 +225,7 @@ const CSSStyles: Array<string> = [
   "wordBreak",
   "wordSpacing",
   "wordWrap",
+  "writingMode",
   "zIndex",
 ];
 
@@ -178,7 +234,29 @@ const CSSStyles: Array<string> = [
  * @param prop The key of the prop to test.
  * @returns Whether the key passed in is a valid CSS property.
  */
-export const isValidCssProp = (prop: string): prop is keyof CSSProperties => CSSStyles.includes(prop);
+export const isValidCssProp = (prop: string): prop is keyof ExtendedCSSProperties =>
+  CSSStyles.includes(prop) || CSSExtensionStyles.includes(prop);
+
+const transformExtension = (prop: string): Array<string> => {
+  const direction = prop.slice(-1);
+  const property = prop.slice(0, -1);
+  const transformedProps = [];
+
+  switch (direction) {
+    case "X": {
+      transformedProps.push(property.concat("Left"));
+      transformedProps.push(property.concat("Right"));
+      break;
+    }
+    case "Y": {
+      transformedProps.push(property.concat("Top"));
+      transformedProps.push(property.concat("Bottom"));
+      break;
+    }
+  }
+
+  return transformedProps as Array<keyof CSSProperties>;
+};
 
 /**
  * This function takes an object of props that has a mix of HTML attributes, custom component props, and CSS styles and
@@ -188,16 +266,21 @@ export const isValidCssProp = (prop: string): prop is keyof CSSProperties => CSS
  * @returns An object with just the CSSProperties from the props.
  */
 export const extractCssFromProps = (props: { [x: string]: any }): CSSProperties => {
-  const propKeys = Object.keys(props);
-  const validStyleKeys = propKeys.filter((key) => isValidCssProp(key));
+  const transformedProps: { [x: string]: string } = {};
 
-  const styleProps: { [x: string]: any } = {};
-
-  validStyleKeys.forEach((styleKey) => {
-    const key = styleKey as keyof CSSProperties;
-
+  Object.entries(props).forEach(([key, value]) => {
     // auto evaluate numbers using the spacing function from the Theme object
-    styleProps[key] = isNaN(+props[styleKey]) ? props[styleKey] : theme.spacing(props[styleKey]);
+    const evaluatedValue = isNaN(+value) ? value : theme.spacing(value);
+
+    // if prop is an extension, expand to valid CSS props with values
+    if (CSSExtensionStyles.includes(key)) {
+      transformExtension(key).forEach((x) => {
+        transformedProps[x] = evaluatedValue;
+      });
+    } else if (isValidCssProp(key)) {
+      transformedProps[key] = evaluatedValue;
+    }
   });
-  return styleProps;
+
+  return transformedProps;
 };

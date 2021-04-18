@@ -1,22 +1,20 @@
-/** @jsxRuntime classic */
-/** @jsx jsx */
-import { jsx } from "@emotion/react"
 import * as React from "react";
 import styled from "@emotion/styled";
-import { extractCssFromProps } from "../utils/CSSStyles";
+import { ExtendedCSSProperties, extractCssFromProps } from "../utils/CSSStyles";
 import { ComponentStyles } from "./types";
 import { useButtonGroupChildrenContext } from "./ButtonGroup";
-import { SerializedStyles } from "@emotion/react";
+import { css } from "@emotion/react";
+import { CSSInterpolation } from "@emotion/serialize";
 
 type HTMLButtonProps = Omit<React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>, "color">;
 
-export interface ButtonProps extends HTMLButtonProps, Omit<React.CSSProperties, "translate"> {
+export interface ButtonProps extends HTMLButtonProps, ExtendedCSSProperties {
   variant?: "default" | "action" | "primary";
   startIcon?: React.ReactElement;
   endIcon?: React.ReactElement;
   size?: "default" | "small" | "large";
   isLoading?: boolean;
-  sx?: SerializedStyles;
+  sx?: CSSInterpolation;
 }
 
 const base: ComponentStyles<ButtonProps> = ({ theme }) => ({
@@ -31,7 +29,7 @@ const base: ComponentStyles<ButtonProps> = ({ theme }) => ({
   alignItems: "center",
   justifyContent: "center",
   border: "1px solid",
-  "&:active": {
+  "&:active:not(:disabled)": {
     transform: "scale(0.98)",
     boxShadow: "inset 0 3px 5px rgb(0 0 0 / 13%)"
   },
@@ -61,7 +59,7 @@ const variant: ComponentStyles<ButtonProps> = ({ variant, theme }) => {
         "&:hover:not(:disabled)": {
           backgroundColor: theme.palette.active.hover
         },
-        "&:active": {
+        "&:active:not(:disabled)": {
           backgroundColor: theme.palette.active.pressed
         }
       };
@@ -74,7 +72,7 @@ const variant: ComponentStyles<ButtonProps> = ({ variant, theme }) => {
           backgroundColor: theme.palette.background.transparent.hover,
           borderColor: "#cbcbcb"
         },
-        "&:active": {
+        "&:active:not(:disabled)": {
           borderColor: "#bababa"
         }
       };
@@ -105,11 +103,7 @@ const disabled: ComponentStyles<ButtonProps> = ({ disabled }) => (
   }
 )
 
-const overrides: ComponentStyles<ButtonProps> = (...props) => {
-  return ({
-    ...extractCssFromProps(props)
-  });
-};
+const overrides: ComponentStyles<ButtonProps> = (props) => ({ ...extractCssFromProps(props) });
 
 export const StyledButton = styled.button<ButtonProps>(
   base,
@@ -151,13 +145,12 @@ const Button: React.FC<ButtonProps> = ({
 }) => {
   const { size } = props;
   const groupProps = useButtonGroupChildrenContext();
-  console.log(groupProps)
   
   return (
     <StyledButton
       {...groupProps}
       {...props}
-      css={{...groupProps.sx, ...sx}}
+      css={css(groupProps.sx, sx)}
       disabled={(isLoading ?? groupProps.isLoading) || (disabled ?? groupProps.disabled)}
     >
       <StyledButtonLabel size={size ?? groupProps.size}>
