@@ -1,27 +1,28 @@
+/** @jsxRuntime classic */
+/** @jsx jsx */
+import { jsx } from "@emotion/react"
 import * as React from "react";
-import { Theme } from "@emotion/react";
-import styled, { CSSObject } from "@emotion/styled";
+import styled from "@emotion/styled";
+import { extractCssFromProps } from "../utils/CSSStyles";
+import { ComponentStyles } from "./types";
+import { useButtonGroupChildrenContext } from "./ButtonGroup";
+import { SerializedStyles } from "@emotion/react";
 
-export interface ButtonComponentProps {
+type HTMLButtonProps = Omit<React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>, "color">;
+
+export interface ButtonProps extends HTMLButtonProps, Omit<React.CSSProperties, "translate"> {
   variant?: "default" | "action" | "primary";
   startIcon?: React.ReactElement;
   endIcon?: React.ReactElement;
-  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
   size?: "default" | "small" | "large";
   isLoading?: boolean;
-  disabled?: boolean;
-  children: React.ReactNode;
+  sx?: SerializedStyles;
 }
 
-export interface ButtonProps extends ButtonComponentProps, Omit<React.CSSProperties, "translate"> {}
-
-type ButtonStyles = (props: ButtonProps & { theme: Theme }) => CSSObject;
-
-const base: ButtonStyles = () => ({
-  border: "none",
+const base: ComponentStyles<ButtonProps> = ({ theme }) => ({
   borderRadius: "3px",
-  minWidth: "100px",
-  maxWidth: "250px",
+  minWidth: theme.spacing(20),
+  maxWidth: theme.spacing(50),
   transition: "all ease 100ms",
   cursor: "pointer",
   lineHeight: "18px",
@@ -29,6 +30,7 @@ const base: ButtonStyles = () => ({
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
+  border: "1px solid",
   "&:active": {
     transform: "scale(0.98)",
     boxShadow: "inset 0 3px 5px rgb(0 0 0 / 13%)"
@@ -39,11 +41,12 @@ const base: ButtonStyles = () => ({
   }
 });
 
-const variant: ButtonStyles = ({ variant, theme }) => {
+const variant: ComponentStyles<ButtonProps> = ({ variant, theme }) => {
   switch (variant) {
     case "action":
       return {
         backgroundColor: theme.palette.background.transparent.main,
+        borderColor: theme.palette.background.transparent.main,
         color: theme.palette.active.main,
         "&:hover:not(:disabled)": {
           backgroundColor: theme.palette.background.transparent.hover
@@ -52,6 +55,7 @@ const variant: ButtonStyles = ({ variant, theme }) => {
     case "primary":
       return {
         backgroundColor: theme.palette.active.main,
+        borderColor: theme.palette.active.main,
         color: "#fff",
         fontWeight: 600,
         "&:hover:not(:disabled)": {
@@ -63,7 +67,7 @@ const variant: ButtonStyles = ({ variant, theme }) => {
       };
     default:
       return {
-        border: `1px solid ${theme.palette.line.default}`,
+        borderColor: theme.palette.line.default,
         backgroundColor: theme.palette.background.transparent.main,
         color: theme.palette.active.main,
         "&:hover:not(:disabled)": {
@@ -77,7 +81,7 @@ const variant: ButtonStyles = ({ variant, theme }) => {
   }
 };
 
-const sizes: ButtonStyles = ({ size, theme }) => {
+const sizes: ComponentStyles<ButtonProps> = ({ size, theme }) => {
   switch (size) {
     case "small":
       return {
@@ -94,29 +98,20 @@ const sizes: ButtonStyles = ({ size, theme }) => {
   }
 }
 
-const disabled: ButtonStyles = ({ disabled }) => (
+const disabled: ComponentStyles<ButtonProps> = ({ disabled }) => (
   !disabled ? {} : {
     opacity: 0.4,
     cursor: "not-allowed",
   }
 )
 
-const overrides: ButtonStyles = ({
-  variant,
-  size,
-  children,
-  theme,
-  endIcon,
-  startIcon,
-  onClick,
-  ...props
-}) => {
+const overrides: ComponentStyles<ButtonProps> = (...props) => {
   return ({
-    ...props
+    ...extractCssFromProps(props)
   });
 };
 
-const StyledButton = styled.button<ButtonProps>(
+export const StyledButton = styled.button<ButtonProps>(
   base,
   variant,
   sizes,
@@ -129,7 +124,7 @@ const StyledIcon = styled.span({
   width: "18px",
 });
 
-const StyledButtonLabel = styled.span<Pick<ButtonComponentProps, "size">>(({ theme, size }) => {
+const StyledButtonLabel = styled.span<Pick<ButtonProps, "size">>(({ theme, size }) => {
   let gap = theme.spacing(1);
   switch (size) {
     case "small": gap = theme.spacing(0); break;
@@ -149,22 +144,30 @@ const Button: React.FC<ButtonProps> = ({
   startIcon,
   endIcon,
   children,
-  variant = "default",
-  size = "default",
-  isLoading = false,
-  disabled = false,
+  isLoading,
+  disabled,
+  sx,
   ...props
 }) => {
+  const { size } = props;
+  const groupProps = useButtonGroupChildrenContext();
+  console.log(groupProps)
+  
   return (
-    <StyledButton size={size} variant={variant} {...props} disabled={isLoading || disabled}>
-      <StyledButtonLabel size={size}>
-        {isLoading && "Loading..."}
-        {!isLoading && (
-          <>
+    <StyledButton
+      {...groupProps}
+      {...props}
+      css={{...groupProps.sx, ...sx}}
+      disabled={(isLoading ?? groupProps.isLoading) || (disabled ?? groupProps.disabled)}
+    >
+      <StyledButtonLabel size={size ?? groupProps.size}>
+        {(isLoading || groupProps.isLoading) && "Loading..."}
+        {!isLoading && !groupProps.isLoading && (
+          <React.Fragment>
             {startIcon && <StyledIcon>{startIcon}</StyledIcon>}
             {children}
             {endIcon && <StyledIcon>{endIcon}</StyledIcon>}
-          </>
+          </React.Fragment>
         )}
       </StyledButtonLabel>
     </StyledButton>

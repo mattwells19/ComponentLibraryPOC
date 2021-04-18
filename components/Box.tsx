@@ -1,16 +1,13 @@
-import { Theme } from "@emotion/react";
-import styled, { CSSObject } from "@emotion/styled";
+import styled from "@emotion/styled";
+import { extractCssFromProps } from "../utils/CSSStyles";
+import { ComponentStyles } from "./types";
 
-export interface BoxComponentProps {
+export interface BoxProps extends React.CSSProperties {
   children: React.ReactNode;
 }
 
-export interface BoxProps extends BoxComponentProps, React.CSSProperties {}
+const overrides: ComponentStyles<BoxProps> = (props) => ({ ...extractCssFromProps(props) });
 
-type BoxStyles = (props: BoxProps & { theme: Theme }) => CSSObject;
-
-const styles: BoxStyles = ({ theme, children, ...props }) => ({ ...props });
-
-const Box = styled.div(styles);
+const Box = styled.div(overrides);
 
 export default Box;

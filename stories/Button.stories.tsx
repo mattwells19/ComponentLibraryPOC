@@ -6,7 +6,7 @@ import SearchIcon from "./icons/SearchIcon";
 const icons = { "None": undefined, "SearchIcon": <SearchIcon fill="currentColor"/> };
 
 const ButtonStory: Story<ButtonProps> = ({ ...args }) => (
-  <Box as="main" display="flex" gap="6px">
+  <Box as="main" display="flex" alignItems="flex-start" gap={2}>
     <Button {...args} variant="default">Default</Button>
     <Button {...args} variant="action">Action</Button>
     <Button {...args} variant="primary">Primary</Button>
