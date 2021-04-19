@@ -1,17 +1,15 @@
-import * as React from "react";
+import { ReactElement, ButtonHTMLAttributes, Fragment } from "react";
 import styled from "@emotion/styled";
-import { ExtendedCSSProperties, extractCssFromProps } from "../utils/CSSStyles";
-import { ComponentStyles } from "./types";
+import { extractCssFromProps } from "../utils/CSSStyles";
+import { ComponentPropsExtended, ComponentStyles } from "./types";
 import { useButtonGroupChildrenContext } from "./ButtonGroup";
 import { css } from "@emotion/react";
 import { CSSInterpolation } from "@emotion/serialize";
-
-type HTMLButtonProps = Omit<React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>, "color">;
-
-export interface ButtonProps extends HTMLButtonProps, ExtendedCSSProperties {
+import { styledOptions } from "./common";
+export interface ButtonProps extends ComponentPropsExtended<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement> {
   variant?: "default" | "action" | "primary";
-  startIcon?: React.ReactElement;
-  endIcon?: React.ReactElement;
+  startIcon?: ReactElement;
+  endIcon?: ReactElement;
   size?: "default" | "small" | "large";
   isLoading?: boolean;
   sx?: CSSInterpolation;
@@ -40,7 +38,7 @@ const base: ComponentStyles<ButtonProps> = ({ disabled, theme }) => ({
   }
 });
 
-const variant: ComponentStyles<ButtonProps> = ({ disabled, isLoading, variant, theme }) => {
+const variant: ComponentStyles<ButtonProps> = ({ disabled, variant, theme }) => {
   switch (variant) {
     case "action":
       return {
@@ -111,7 +109,7 @@ const disabled: ComponentStyles<ButtonProps> = ({ disabled }) => (
 
 const overrides: ComponentStyles<ButtonProps> = (props) => ({ ...extractCssFromProps(props) });
 
-export const StyledButton = styled.button<ButtonProps>(
+export const StyledButton = styled("button", styledOptions)<ButtonProps>(
   base,
   variant,
   sizes,
@@ -119,12 +117,12 @@ export const StyledButton = styled.button<ButtonProps>(
   overrides
 );
 
-const StyledIcon = styled.span({
+const StyledIcon = styled("span", styledOptions)({
   display: "flex",
   width: "18px",
 });
 
-const StyledButtonLabel = styled.span<Pick<ButtonProps, "size">>(({ theme, size }) => {
+const StyledButtonLabel = styled("span", styledOptions)<Pick<ButtonProps, "size">>(({ theme, size }) => {
   let gap = theme.spacing(1);
   switch (size) {
     case "small": gap = theme.spacing(0); break;
@@ -162,11 +160,11 @@ const Button: React.FC<ButtonProps> = ({
       <StyledButtonLabel size={size ?? groupProps.size}>
         {(isLoading || groupProps.isLoading) && "Loading..."}
         {!isLoading && !groupProps.isLoading && (
-          <React.Fragment>
+          <Fragment>
             {startIcon && <StyledIcon>{startIcon}</StyledIcon>}
             {children}
             {endIcon && <StyledIcon>{endIcon}</StyledIcon>}
-          </React.Fragment>
+          </Fragment>
         )}
       </StyledButtonLabel>
     </StyledButton>

@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import { ExtendedCSSProperties, extractCssFromProps } from "../utils/CSSStyles";
+import { styledOptions } from "./common";
 
-const Box = styled.div<ExtendedCSSProperties>((props) => ({ ...extractCssFromProps(props) }));
+const Box = styled("div", styledOptions)<ExtendedCSSProperties>((props) => ({ ...extractCssFromProps(props) }));
 
 export default Box;
