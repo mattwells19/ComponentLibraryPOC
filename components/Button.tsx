@@ -17,7 +17,7 @@ export interface ButtonProps extends HTMLButtonProps, ExtendedCSSProperties {
   sx?: CSSInterpolation;
 }
 
-const base: ComponentStyles<ButtonProps> = ({ theme }) => ({
+const base: ComponentStyles<ButtonProps> = ({ disabled, theme }) => ({
   borderRadius: "3px",
   minWidth: theme.spacing(20),
   maxWidth: theme.spacing(50),
@@ -29,7 +29,8 @@ const base: ComponentStyles<ButtonProps> = ({ theme }) => ({
   alignItems: "center",
   justifyContent: "center",
   border: "1px solid",
-  "&:active:not(:disabled)": {
+  "&:active": disabled ? {} : 
+  {
     transform: "scale(0.98)",
     boxShadow: "inset 0 3px 5px rgb(0 0 0 / 13%)"
   },
@@ -39,14 +40,15 @@ const base: ComponentStyles<ButtonProps> = ({ theme }) => ({
   }
 });
 
-const variant: ComponentStyles<ButtonProps> = ({ variant, theme }) => {
+const variant: ComponentStyles<ButtonProps> = ({ disabled, isLoading, variant, theme }) => {
   switch (variant) {
     case "action":
       return {
         backgroundColor: theme.palette.background.transparent.main,
         borderColor: theme.palette.background.transparent.main,
         color: theme.palette.active.main,
-        "&:hover:not(:disabled)": {
+        "&:hover": disabled ? {} : 
+        {
           backgroundColor: theme.palette.background.transparent.hover
         }
       };
@@ -56,10 +58,12 @@ const variant: ComponentStyles<ButtonProps> = ({ variant, theme }) => {
         borderColor: theme.palette.active.main,
         color: "#fff",
         fontWeight: 600,
-        "&:hover:not(:disabled)": {
+        "&:hover": disabled ? {} : 
+        {
           backgroundColor: theme.palette.active.hover
         },
-        "&:active:not(:disabled)": {
+        "&:active": disabled ? {} : 
+        {
           backgroundColor: theme.palette.active.pressed
         }
       };
@@ -68,11 +72,13 @@ const variant: ComponentStyles<ButtonProps> = ({ variant, theme }) => {
         borderColor: theme.palette.line.default,
         backgroundColor: theme.palette.background.transparent.main,
         color: theme.palette.active.main,
-        "&:hover:not(:disabled)": {
+        "&:hover": disabled ? {} : 
+        {
           backgroundColor: theme.palette.background.transparent.hover,
           borderColor: "#cbcbcb"
         },
-        "&:active:not(:disabled)": {
+        "&:active": disabled ? {} : 
+        {
           borderColor: "#bababa"
         }
       };

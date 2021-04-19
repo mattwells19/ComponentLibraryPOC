@@ -1,7 +1,7 @@
 import { Story, Meta } from "@storybook/react";
 import Box from "../components/Box";
 import Button, { ButtonProps } from "../components/Button";
-import SearchIcon from "./icons/SearchIcon";
+import SearchIcon from "../icons/SearchIcon";
 
 const icons = { "None": undefined, "SearchIcon": <SearchIcon fill="currentColor"/> };
 

@@ -4,6 +4,7 @@ import tomorrow from "../styles/tomorrow";
 import { Box, Button, ButtonGroup, Heading } from "../components";
 import { ButtonProps } from "../components/Button";
 import { ButtonGroupProps } from "../components/ButtonGroup";
+import SearchIcon from "../icons/SearchIcon";
 
 function Home() {
   const [buttonProps, setButtonProps] = React.useState<ButtonProps>({ disabled: false, isLoading: false });
@@ -51,22 +52,36 @@ function Home() {
             />
             disabled
           </Box>
+          <Box as="label">
+            <input
+              type="checkbox"
+              checked={Boolean(buttonProps.startIcon)}
+              onChange={(e) => setButtonProps((prev) => ({ ...prev, startIcon: e.target.checked ? <SearchIcon/> : undefined }))} 
+            />
+            startIcon
+          </Box>
+          <Box as="label">
+            <input
+              type="checkbox"
+              checked={Boolean(buttonProps.endIcon)}
+              onChange={(e) => setButtonProps((prev) => ({ ...prev, endIcon: e.target.checked ? <SearchIcon/> : undefined }))} 
+            />
+            endIcon
+          </Box>
         </Box>
-        <SyntaxHighlighter language="javascript" style={tomorrow}>
+        <SyntaxHighlighter language="tsx" style={tomorrow}>
           {`<Box display="flex" gap={3}>
-  <Button disabled={${buttonProps.disabled}} isLoading={${buttonProps.isLoading}}>
+  <Button${buttonProps.isLoading ? " isLoading" : ""}${buttonProps.disabled ? " disabled" : ""}${Boolean(buttonProps.startIcon) ? " startIcon={<SearchIcon />}" : ""}${Boolean(buttonProps.endIcon) ? " endIcon={<SearchIcon />}" : ""}>
     Default
   </Button>
-  <Button disabled={${buttonProps.disabled}} isLoading={${buttonProps.isLoading}} variant="action">
+  <Button variant="action"${buttonProps.isLoading ? " isLoading" : ""}${buttonProps.disabled ? " disabled" : ""}${Boolean(buttonProps.startIcon) ? " startIcon={<SearchIcon />}" : ""}${Boolean(buttonProps.endIcon) ? " endIcon={<SearchIcon />}" : ""}>
     Action
   </Button>
-  <Button disabled={${buttonProps.disabled}} isLoading={${buttonProps.isLoading}} variant="primary">
+  <Button variant="primary"${buttonProps.isLoading ? " isLoading" : ""}${buttonProps.disabled ? " disabled" : ""}${Boolean(buttonProps.startIcon) ? " startIcon={<SearchIcon />}" : ""}${Boolean(buttonProps.endIcon) ? " endIcon={<SearchIcon />}" : ""}>
     Primary
   </Button>
   {/* Customize your button with ease! */}
-  <Button
-    disabled={${buttonProps.disabled}}
-    isLoading={${buttonProps.isLoading}}
+  <Button${buttonProps.isLoading ? "\n\tisLoading" : ""}${buttonProps.disabled ? "\n\tdisabled" : ""}${Boolean(buttonProps.startIcon) ? "\n\tstartIcon={<SearchIcon />}" : ""}${Boolean(buttonProps.endIcon) ? "\n\tendIcon={<SearchIcon />}" : ""}
     backgroundColor="purple"
     color="#ffff00"
     css={{ "&:hover:not(:disabled)": { backgroundColor: "blue" } }}
@@ -114,8 +129,8 @@ function Home() {
             </select>
           </Box>
         </Box>
-        <SyntaxHighlighter language="javascript" style={tomorrow}>
-          {`<ButtonGroup disabled={${buttonGroupProps.disabled}} isLoading={${buttonGroupProps.isLoading}} variant="${buttonGroupProps.variant}">
+        <SyntaxHighlighter language="tsx" style={tomorrow}>
+          {`<ButtonGroup variant="${buttonGroupProps.variant}"${buttonGroupProps.isLoading ? " isLoading" : ""}${buttonGroupProps.disabled ? " disabled" : ""}>
   <Button>Button 1</Button>
   <Button>Button 2</Button>
   <Button>Button 3</Button>
