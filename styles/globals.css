@@ -16,3 +16,13 @@ a {
 * {
   box-sizing: border-box;
 }
+
+@media only screen and (max-width: 600px) {
+  .mobile-row {
+    gap: 0;
+    justify-content: space-around;
+  }
+  .mobile-column {
+    align-items: center;
+  }
+}

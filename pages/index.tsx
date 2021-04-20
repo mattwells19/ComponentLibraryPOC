@@ -27,7 +27,7 @@ function Home() {
         </Box>
       </Box>
       <Section title="Variants">
-        <Box display="flex" gap={3}>
+        <Box className="mobile-row" display="flex" gap={3}>
           <Button>
             Default
           </Button>
@@ -40,7 +40,7 @@ function Home() {
         </Box>
       </Section>
       <Section title="Size">
-        <Box display="flex" alignItems="center" gap={3}>
+        <Box className="mobile-row" display="flex" alignItems="center" gap={3}>
           <Button size="small">
             Small
           </Button>
@@ -63,7 +63,7 @@ function Home() {
         </Button>
       </Section>
       <Section title="Button Group">
-        <Box display="flex" flexDirection="column" gap={3}>
+        <Box className="mobile-column" display="flex" flexDirection="column" gap={3}>
           <ButtonGroup>
             <Button>Button 1</Button>
             <Button>Button 2</Button>

@@ -17,7 +17,11 @@ function Section ({ children, title }: SectionProps) {
         {children}
       </Box>
       <SyntaxHighlighter language="tsx" style={tomorrow} css={{ borderRadius: "5px" }}>
-        {reactElementToJSXString(children, { maxInlineAttributesLineLength: 300 })}
+        {reactElementToJSXString(children, {
+          maxInlineAttributesLineLength: 300,
+          /* @ts-ignore */
+          displayName: (element) => element?.type.displayName ?? element?.type.name 
+        })}
       </SyntaxHighlighter>
     </Box>
   )
