@@ -39,6 +39,7 @@ const ButtonGroup: React.FC<ButtonGroupProps> = ({ children, ...props }) => {
       </StyledButtonGroup>
     </ButtonGroupChildrenContext.Provider>
   )
-} 
+}
+ButtonGroup.displayName = "ButtonGroup";
 
 export default ButtonGroup;

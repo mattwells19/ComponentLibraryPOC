@@ -14,5 +14,6 @@ const base: ComponentStyles<HeadingProps> = () => ({ margin: 0 });
 const overrides: ComponentStyles<HeadingProps> = (props) => ({ ...extractCssFromProps(props) });
 
 const Heading = styled("h1", styledOptions)<HeadingProps>(base, overrides);
+Heading.displayName = "Heading";
 
 export default Heading;

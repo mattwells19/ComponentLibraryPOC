@@ -170,5 +170,6 @@ const Button: React.FC<ButtonProps> = ({
     </StyledButton>
   );
 };
+Button.displayName = "Button";
 
 export default Button;
