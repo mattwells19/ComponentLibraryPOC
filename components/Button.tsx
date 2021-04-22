@@ -1,11 +1,10 @@
 import { ReactElement, ButtonHTMLAttributes, Fragment } from "react";
-import styled from "@emotion/styled";
 import { extractCssFromProps } from "../utils/CSSStyles";
 import { ComponentPropsExtended, ComponentStyles } from "./types";
 import { useButtonGroupChildrenContext } from "./ButtonGroup";
 import { css } from "@emotion/react";
 import { CSSInterpolation } from "@emotion/serialize";
-import { styledOptions } from "./common";
+import nova from "./common";
 
 export interface ButtonProps extends ComponentPropsExtended<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement> {
   variant?: "default" | "action" | "primary";
@@ -110,7 +109,7 @@ const disabled: ComponentStyles<ButtonProps> = ({ disabled }) => (
 
 const overrides: ComponentStyles<ButtonProps> = (props) => ({ ...extractCssFromProps(props) });
 
-export const StyledButton = styled("button", styledOptions)<ButtonProps>(
+export const StyledButton = nova("button")<ButtonProps>(
   base,
   variant,
   sizes,
@@ -118,12 +117,12 @@ export const StyledButton = styled("button", styledOptions)<ButtonProps>(
   overrides
 );
 
-const StyledIcon = styled("span", styledOptions)({
+const StyledIcon = nova("span")({
   display: "flex",
   width: "18px",
 });
 
-const StyledButtonLabel = styled("span", styledOptions)<Pick<ButtonProps, "size">>(({ theme, size }) => {
+const StyledButtonLabel = nova("span")<Pick<ButtonProps, "size">>(({ theme, size }) => {
   let gap = theme.spacing(1);
   switch (size) {
     case "small": gap = theme.spacing(0); break;
