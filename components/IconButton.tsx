@@ -1,10 +1,11 @@
 import { ButtonHTMLAttributes } from "react";
+import styled from "@emotion/styled";
 import { extractCssFromProps } from "../utils/CSSStyles";
 import { ComponentPropsExtended, ComponentStyles } from "./types";
 import { useButtonGroupChildrenContext } from "./ButtonGroup";
 import { css } from "@emotion/react";
 import { CSSInterpolation } from "@emotion/serialize";
-import nova from "./common";
+import { styledOptions } from "./common";
 
 export interface IconButtonProps extends ComponentPropsExtended<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement> {
   variant?: "default" | "action" | "primary";
@@ -105,7 +106,7 @@ const disabled: ComponentStyles<IconButtonProps> = ({ disabled }) => (
 
 const overrides: ComponentStyles<IconButtonProps> = (props) => ({ ...extractCssFromProps(props) });
 
-export const StyledIconButton = nova("button")<IconButtonProps>(
+export const StyledIconButton = styled("button", styledOptions)<IconButtonProps>(
   base,
   variant,
   sizes,
@@ -113,7 +114,7 @@ export const StyledIconButton = nova("button")<IconButtonProps>(
   overrides
 );
 
-const iconSizes: ComponentStyles<IconButtonProps> = ({ size }) => {
+const iconSizes: ComponentStyles<IconButtonProps> = ({ size, theme }) => {
   switch (size) {
     case "small":
       return {
@@ -130,7 +131,7 @@ const iconSizes: ComponentStyles<IconButtonProps> = ({ size }) => {
   }
 }
 
-const StyledIcon = nova("span")({ display: "flex" }, iconSizes);
+const StyledIcon = styled("span", styledOptions)({ display: "flex" }, iconSizes);
 
 const IconButton: React.FC<IconButtonProps> = ({
   children,

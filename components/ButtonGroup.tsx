@@ -1,8 +1,14 @@
+import styled from "@emotion/styled";
 import { ButtonProps } from "./Button";
 import Box from "./Box";
 import React from "react";
 
 export type ButtonGroupProps = Exclude<ButtonProps, "startIcon" | "endIcon">;
+
+export const StyledButtonGroup = styled(Box)({
+  gap: 0,
+  display: "flex",
+});
 
 const ButtonGroupChildrenContext = React.createContext<Partial<ButtonProps>>({});
 ButtonGroupChildrenContext.displayName = "ButtonGroupChildrenContext";
@@ -28,9 +34,9 @@ const ButtonGroup: React.FC<ButtonGroupProps> = ({ children, ...props }) => {
       ...props,
       sx: childrenStyles,
     }}>
-      <Box display="flex" gap={0}>
+      <StyledButtonGroup>
         {children}
-      </Box>
+      </StyledButtonGroup>
     </ButtonGroupChildrenContext.Provider>
   )
 }
