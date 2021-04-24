@@ -1,7 +1,7 @@
 import { Story, Meta } from "@storybook/react";
 import Box from "../components/Box";
-import Button from "../components/Button";
-import ButtonGroup, { ButtonGroupProps } from "../components/ButtonGroup";
+import Button from "../components/Button/Button";
+import ButtonGroup, { ButtonGroupProps } from "../components/Button/ButtonGroup";
 
 const ButtonGroupStory: Story<ButtonGroupProps> = ({ ...args }) => (
   <Box display="flex" flexDirection="column" gap={2}>

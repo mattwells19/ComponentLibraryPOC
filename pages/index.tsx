@@ -1,12 +1,11 @@
 import { Box, Button, ButtonGroup, Heading, IconButton } from "../components";
 import Section from "../docs_components/Section";
-import styled from "@emotion/styled";
-import { styledOptions } from "../components/common";
+import { nova } from "../components/common";
 import { JoyIcon, SearchIcon } from "../icons";
 import { TableOfContentsContextProvider, useTableOfContents } from "../docs_components/TableOfContentsContext";
 import { FC } from "react";
 
-const JumpTag = styled("a", styledOptions)(({ theme }) => ({
+const JumpTag = nova("a")(({ theme }) => ({
   color: theme.palette.active.main,
   "&:hover": {
     textDecoration: "underline"
@@ -73,7 +72,7 @@ const ButtonDocs: FC = () => {
       </Section>
       <Section title="Custom">
         <Button backgroundColor="purple" color="#ffff00" sx={{ "&:hover": { backgroundColor: "blue" } }}>
-          Default
+          Custom
         </Button>
       </Section>
       <Section title="Button Group">

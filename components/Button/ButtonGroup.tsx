@@ -1,11 +1,10 @@
-import styled from "@emotion/styled";
 import { ButtonProps } from "./Button";
-import Box from "./Box";
 import React from "react";
+import { nova } from "../common";
 
 export type ButtonGroupProps = Exclude<ButtonProps, "startIcon" | "endIcon">;
 
-export const StyledButtonGroup = styled(Box)({
+export const StyledButtonGroup = nova("div")({
   gap: 0,
   display: "flex",
 });

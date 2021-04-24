@@ -1,25 +1,23 @@
-import { ReactElement, ButtonHTMLAttributes, Fragment } from "react";
-import styled from "@emotion/styled";
-import { extractCssFromProps } from "../utils/CSSStyles";
-import { ComponentPropsExtended, ComponentStyles } from "./types";
+import { ButtonHTMLAttributes } from "react";
+import { extractCssFromProps } from "../../utils/CSSStyles";
+import { ComponentPropsExtended, ComponentStyles } from "../types";
 import { useButtonGroupChildrenContext } from "./ButtonGroup";
 import { css } from "@emotion/react";
 import { CSSInterpolation } from "@emotion/serialize";
-import { styledOptions } from "./common";
+import { nova } from "../common";
+import ButtonIcon from "./ButtonIcon";
 
-export interface ButtonProps extends ComponentPropsExtended<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement> {
+export interface IconButtonProps extends ComponentPropsExtended<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement> {
   variant?: "default" | "action" | "primary";
-  startIcon?: ReactElement;
-  endIcon?: ReactElement;
   size?: "default" | "small" | "large";
   isLoading?: boolean;
   sx?: CSSInterpolation;
 }
 
-const base: ComponentStyles<ButtonProps> = ({ disabled, theme }) => ({
+type IconButtonStyles = ComponentStyles<IconButtonProps>;
+
+const base: IconButtonStyles = ({ disabled }) => ({
   borderRadius: "3px",
-  minWidth: theme.spacing(20),
-  maxWidth: theme.spacing(50),
   transition: "all ease 100ms",
   cursor: "pointer",
   lineHeight: "18px",
@@ -39,7 +37,7 @@ const base: ComponentStyles<ButtonProps> = ({ disabled, theme }) => ({
   }
 });
 
-const variant: ComponentStyles<ButtonProps> = ({ disabled, variant, theme }) => {
+const variant: IconButtonStyles = ({ disabled, variant, theme }) => {
   switch (variant) {
     case "action":
       return {
@@ -84,33 +82,33 @@ const variant: ComponentStyles<ButtonProps> = ({ disabled, variant, theme }) => 
   }
 };
 
-const sizes: ComponentStyles<ButtonProps> = ({ size, theme }) => {
+const sizes: IconButtonStyles = ({ size, theme }) => {
   switch (size) {
     case "small":
       return {
-        padding: theme.spacing(0.5, 1),
+        padding: theme.spacing(1.75),
       };
     case "large":
       return {
-        padding: theme.spacing(2, 4),
+        padding: theme.spacing(2),
       };
     default:
       return {
-        padding: theme.spacing(1, 2),
+        padding: theme.spacing(1.9),
       }
   }
 }
 
-const disabled: ComponentStyles<ButtonProps> = ({ disabled }) => (
-  !disabled ? {} : {
+const disabled: IconButtonStyles = ({ disabled }) => (
+  disabled ? {
     opacity: 0.4,
     cursor: "not-allowed",
-  }
+  }: {}
 )
 
-const overrides: ComponentStyles<ButtonProps> = (props) => ({ ...extractCssFromProps(props) });
+const overrides: IconButtonStyles = (props) => ({ ...extractCssFromProps(props) });
 
-export const StyledButton = styled("button", styledOptions)<ButtonProps>(
+export const StyledIconButton = nova("button")<IconButtonProps>(
   base,
   variant,
   sizes,
@@ -118,30 +116,7 @@ export const StyledButton = styled("button", styledOptions)<ButtonProps>(
   overrides
 );
 
-const StyledIcon = styled("span", styledOptions)({
-  display: "flex",
-  width: "18px",
-});
-
-const StyledButtonLabel = styled("span", styledOptions)<Pick<ButtonProps, "size">>(({ theme, size }) => {
-  let gap = theme.spacing(1);
-  switch (size) {
-    case "small": gap = theme.spacing(0); break;
-    case "large": gap = theme.spacing(3); break;
-  }
-
-  return {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-around",
-    width: "100%",
-    gap,
-  }
-});
-
-const Button: React.FC<ButtonProps> = ({
-  startIcon,
-  endIcon,
+const IconButton: React.FC<IconButtonProps> = ({
   children,
   isLoading,
   disabled,
@@ -152,25 +127,21 @@ const Button: React.FC<ButtonProps> = ({
   const groupProps = useButtonGroupChildrenContext();
   
   return (
-    <StyledButton
+    <StyledIconButton
       {...groupProps}
       {...props}
       css={css(groupProps.sx, sx)}
       disabled={(isLoading ?? groupProps.isLoading) || (disabled ?? groupProps.disabled)}
     >
-      <StyledButtonLabel size={size ?? groupProps.size}>
-        {(isLoading || groupProps.isLoading) && "Loading..."}
+      <ButtonIcon size={groupProps.size ?? size}>
+        {(isLoading || groupProps.isLoading) && "..."}
         {!isLoading && !groupProps.isLoading && (
-          <Fragment>
-            {startIcon && <StyledIcon>{startIcon}</StyledIcon>}
-            {children}
-            {endIcon && <StyledIcon>{endIcon}</StyledIcon>}
-          </Fragment>
+          children
         )}
-      </StyledButtonLabel>
-    </StyledButton>
+      </ButtonIcon>
+    </StyledIconButton>
   );
 };
-Button.displayName = "Button";
+IconButton.displayName = "IconButton";
 
-export default Button;
+export default IconButton;
