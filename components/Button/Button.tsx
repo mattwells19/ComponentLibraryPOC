@@ -1,10 +1,7 @@
 import { ReactElement, ButtonHTMLAttributes, Fragment } from "react";
-import { extractCssFromProps } from "../../utils/CSSStyles";
 import { ComponentPropsExtended, ComponentStyles } from "../types";
 import { useButtonGroupChildrenContext } from "./ButtonGroup";
-import { css } from "@emotion/react";
-import { CSSInterpolation } from "@emotion/serialize";
-import { nova } from "../common";
+import nova from "../nova";
 import ButtonIcon from "./ButtonIcon";
 
 export interface ButtonProps extends ComponentPropsExtended<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement> {
@@ -13,7 +10,6 @@ export interface ButtonProps extends ComponentPropsExtended<ButtonHTMLAttributes
   endIcon?: ReactElement;
   size?: "default" | "small" | "large";
   isLoading?: boolean;
-  sx?: CSSInterpolation;
 }
 
 type ButtonStyles = ComponentStyles<ButtonProps>;
@@ -110,22 +106,14 @@ const disabled: ButtonStyles = ({ disabled }) => (
   } : {}
 )
 
-const overrides: ButtonStyles = (props) => ({ ...extractCssFromProps(props) });
+export const StyledButton = nova<ButtonProps>("button", [base, variant, sizes, disabled]);
 
-export const StyledButton = nova("button")<ButtonProps>(
-  base,
-  variant,
-  sizes,
-  disabled,
-  overrides
-);
-
-const StyledButtonLabel = nova("span")<Pick<ButtonProps, "size">>(({
+const StyledButtonLabel = nova<Pick<ButtonProps, "size">>("span", [{
   display: "flex",
   alignItems: "center",
   justifyContent: "space-evenly",
   width: "100%",
-}));
+}]);
 
 const Button: React.FC<ButtonProps> = ({
   startIcon,
@@ -133,20 +121,21 @@ const Button: React.FC<ButtonProps> = ({
   children,
   isLoading,
   disabled,
-  sx,
+  css: customCss,
   ...props
 }) => {
   const { size } = props;
   const groupProps = useButtonGroupChildrenContext();
 
   const evaluatedSize = size ?? groupProps.size;
-  
+  const isDisabled = (isLoading ?? groupProps.isLoading) || (disabled ?? groupProps.disabled);
+
   return (
     <StyledButton
+      css={[groupProps.css, customCss]}
       {...groupProps}
       {...props}
-      css={css(groupProps.sx, sx)}
-      disabled={(isLoading ?? groupProps.isLoading) || (disabled ?? groupProps.disabled)}
+      disabled={isDisabled}
     >
       <StyledButtonLabel size={evaluatedSize}>
         {(isLoading || groupProps.isLoading) && "Loading..."}

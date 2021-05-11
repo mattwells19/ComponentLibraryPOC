@@ -1,10 +1,12 @@
 import { ButtonProps } from "./Button";
 import React from "react";
-import { nova } from "../common";
+import styled from "@emotion/styled";
+import Box from "../Box";
+import { css } from "@emotion/react";
 
 export type ButtonGroupProps = Exclude<ButtonProps, "startIcon" | "endIcon">;
 
-export const StyledButtonGroup = nova("div")({
+export const StyledButtonGroup = styled(Box)({
   gap: 0,
   display: "flex",
 });
@@ -14,7 +16,7 @@ ButtonGroupChildrenContext.displayName = "ButtonGroupChildrenContext";
 export const useButtonGroupChildrenContext = (): Partial<ButtonProps> => React.useContext(ButtonGroupChildrenContext);
 
 const ButtonGroup: React.FC<ButtonGroupProps> = ({ children, ...props }) => {
-  const childrenStyles = {
+  const childrenStyles = css({
     "&:not(:first-of-type):not(:last-of-type)": {
       borderRadius: 0,
     },
@@ -26,12 +28,12 @@ const ButtonGroup: React.FC<ButtonGroupProps> = ({ children, ...props }) => {
       borderRadius: "0px 3px 3px 0px",
       borderLeft: "none",
     },
-  };
+  });
 
   return (
     <ButtonGroupChildrenContext.Provider value={{ 
       ...props,
-      sx: childrenStyles,
+      css: childrenStyles,
     }}>
       <StyledButtonGroup>
         {children}

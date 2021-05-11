@@ -1,18 +1,11 @@
-import { extractCssFromProps } from "../utils/CSSStyles";
-import { CSSInterpolation } from "@emotion/serialize";
-import { ComponentProps, ComponentStyles } from "./types";
-import { nova } from "./common";
+import { ComponentProps } from "./types";
+import nova from "./nova";
 
 export interface TextProps extends ComponentProps<HTMLParagraphElement | HTMLSpanElement> {
   as?: "p" | "span";
-  sx?: CSSInterpolation;
 }
 
-const base: ComponentStyles<TextProps> = () => ({ margin: 0 });
-
-const overrides: ComponentStyles<TextProps> = (props) => ({ ...extractCssFromProps(props) });
-
-const Text = nova("span")<TextProps>(base, overrides);
+const Text = nova<TextProps>("span", [{ margin: 0 }]);
 Text.displayName = "Text";
 
 export default Text;

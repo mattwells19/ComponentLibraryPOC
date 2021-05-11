@@ -54,7 +54,7 @@ function Section ({ children, title }: SectionProps) {
         <CodeIcon/>
       </IconButton>
       <Box
-        sx={codeBoxNormalHeight.current ? styles : ""}
+        css={codeBoxNormalHeight.current ? styles : ""}
         ref={codeBoxRef}
         height={showCode ? `${codeBoxNormalHeight.current}px` : "0px"}
         overflowY="hidden"

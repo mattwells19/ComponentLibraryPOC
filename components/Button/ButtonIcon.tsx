@@ -1,6 +1,7 @@
-import { nova } from "../common";
 import { ComponentProps, ComponentStyles } from "../types";
 import { IconButtonProps } from "./IconButton";
+import styled from "@emotion/styled";
+import { styledOptions } from "../nova";
 
 export type ButtonIconProps = ComponentProps<HTMLSpanElement> & Pick<IconButtonProps, "size">;
 
@@ -27,6 +28,6 @@ const iconSizes: ButtonIconStyles = ({ size }) => {
   }
 }
 
-const ButtonIcon = nova("span")<ButtonIconProps>(iconBase, iconSizes);
+const ButtonIcon = styled("span", styledOptions)<ButtonIconProps>(iconBase, iconSizes);
 
 export default ButtonIcon;
