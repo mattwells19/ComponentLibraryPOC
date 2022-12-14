@@ -10,7 +10,7 @@ function App() {
   const btnRef = useRef<HTMLButtonElement | null>(null);
 
   return (
-    <Box as="form" onClick={(e) => console.log(e.currentTarget.tagName)}>
+    <Box as="form" border="4px dashed white" onClick={(e) => console.log(e.currentTarget.tagName)}>
       <Box>
         <Box as="a" href="https://vitejs.dev" target="_blank">
           <Box as="img" src="/vite.svg" className="logo" alt="Vite logo" />
@@ -25,7 +25,8 @@ function App() {
           ref={btnRef}
           backgroundColor="orange-300"
           // TODO: figure out specificity
-          borderColor={{ hover: "red-300" }}
+          borderColor={{ hover: "white" }}
+          borderWidth="1"
           onClick={() => {
             setCount((count) => count + 1);
             console.log(btnRef.current?.tagName);

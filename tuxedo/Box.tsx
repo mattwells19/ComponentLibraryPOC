@@ -126,22 +126,19 @@ export type BoxProps =
   | ({ as: "wbr" } & TuxedoComponentProps<"wbr">)
   | ({ as: "webview" } & TuxedoComponentProps<"webview">);
 
-const Box = forwardRef<HTMLElement, BoxProps>(
-  ({ as = "div", children, className, ...props }, ref): ReactElement => {
-    const [elementProps, stylesProps] = splitStyleProps(props);
+const Box = forwardRef<HTMLElement, BoxProps>(({ as = "div", children, className, ...props }, ref): ReactElement => {
+  const [elementProps, sprinkleProps, styleProps] = splitStyleProps(props);
 
-    console.log(className);
-
-    return createElement(
-      as,
-      {
-        ...elementProps,
-        className: mergeClassNames(className, sprinkles(stylesProps)),
-        ref,
-      },
-      children,
-    );
-  },
-);
+  return createElement(
+    as,
+    {
+      ...elementProps,
+      className: mergeClassNames(className, sprinkles(sprinkleProps)),
+      style: styleProps,
+      ref,
+    },
+    children,
+  );
+});
 
 export default Box;
