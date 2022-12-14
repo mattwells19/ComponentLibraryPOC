@@ -12,6 +12,7 @@ export const radii = {
   full: "9999px",
 };
 
+// TODO: figure out how to include normal CSS values for this (ex: 15px, 2rem, etc.)
 export const space = {
   px: "1px",
   "0.5": "0.125rem",
@@ -99,7 +100,6 @@ export const responsiveProperties = defineProperties({
     borderRadius: radii,
     borderWidth: space,
     borderStyle: borderStyle,
-    // etc.
   },
   shorthands: {
     padding: ["paddingTop", "paddingBottom", "paddingLeft", "paddingRight"],
@@ -243,10 +243,12 @@ export const colors = {
 
 export const colorProperties = defineProperties({
   conditions: {
-    lightMode: {},
-    darkMode: { "@media": "(prefers-color-scheme: dark)" },
+    // lightMode: {},
+    // darkMode: { "@media": "(prefers-color-scheme: dark)" },
+    default: {},
+    hover: { selector: "&:hover" },
   },
-  defaultCondition: "lightMode",
+  defaultCondition: "default",
   properties: {
     color: colors,
     background: colors,

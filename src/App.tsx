@@ -23,6 +23,9 @@ function App() {
       <Box className="card">
         <Button
           ref={btnRef}
+          backgroundColor="orange-300"
+          // TODO: figure out specificity
+          borderColor={{ hover: "red-300" }}
           onClick={() => {
             setCount((count) => count + 1);
             console.log(btnRef.current?.tagName);

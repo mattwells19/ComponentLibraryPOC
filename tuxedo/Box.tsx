@@ -1,5 +1,5 @@
 import { createElement, forwardRef, ReactElement } from "react";
-import { TuxedoComponentProps, splitStyleProps } from "../tuxedo/tux";
+import { TuxedoComponentProps, splitStyleProps, mergeClassNames } from "../tuxedo/tux";
 import { sprinkles } from "../tuxedo/sprinkles.css";
 
 // TODO: there _has_ to be a better way to do this
@@ -130,13 +130,13 @@ const Box = forwardRef<HTMLElement, BoxProps>(
   ({ as = "div", children, className, ...props }, ref): ReactElement => {
     const [elementProps, stylesProps] = splitStyleProps(props);
 
-    const sprinklesClass = sprinkles(stylesProps);
+    console.log(className);
 
     return createElement(
       as,
       {
         ...elementProps,
-        className: className || sprinklesClass ? `${className ?? ""} ${sprinklesClass}`.trim() : undefined,
+        className: mergeClassNames(className, sprinkles(stylesProps)),
         ref,
       },
       children,

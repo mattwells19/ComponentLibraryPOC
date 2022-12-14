@@ -35,3 +35,9 @@ export function splitStyleProps<T extends keyof ReactHTML>(props: TuxedoComponen
     [{} as HTMLProps<T>, {} as Sprinkles],
   );
 }
+
+export function mergeClassNames(...classList: Array<string | undefined>): string | undefined {
+  const allClasses = classList.join(" ").trim();
+  if (allClasses.length > 0) return allClasses;
+  return undefined;
+}
