@@ -1,6 +1,10 @@
+import "./reset.css";
+import "./components/Box/Box.css";
+import "./components/Text/Text.css";
+import "./components/Button/Button.css";
+
 import { defineProperties, createSprinkles } from "@vanilla-extract/sprinkles";
-import { space, radii, borderStyle, colors } from "./vars";
-import "./Button/Button.css";
+import * as vars from "./vars";
 
 export const responsiveProperties = defineProperties({
   conditions: {
@@ -15,53 +19,56 @@ export const responsiveProperties = defineProperties({
   },
   defaultCondition: ["base", "default"],
   properties: {
-    display: ["none", "flex", "block", "inline", "grid"],
-    flexDirection: ["row", "column", "row-reverse", "column-reverse"],
-    justifyContent: ["stretch", "flex-start", "center", "flex-end", "space-around", "space-between"],
-    alignItems: ["stretch", "flex-start", "center", "flex-end"],
+    display: vars.display,
+    flexDirection: vars.flexDirection,
+    justifyContent: vars.justifyContent,
+    alignItems: vars.alignItems,
 
-    paddingTop: space,
-    paddingBottom: space,
-    paddingLeft: space,
-    paddingRight: space,
+    paddingTop: vars.space,
+    paddingBottom: vars.space,
+    paddingLeft: vars.space,
+    paddingRight: vars.space,
 
-    marginTop: space,
-    marginBottom: space,
-    marginLeft: space,
-    marginRight: space,
+    marginTop: vars.space,
+    marginBottom: vars.space,
+    marginLeft: vars.space,
+    marginRight: vars.space,
 
-    gap: space,
+    gap: vars.space,
 
-    borderRadius: radii,
-    borderWidth: space,
-    borderStyle: borderStyle,
+    borderRadius: vars.radii,
+    borderWidth: vars.space,
+    borderStyle: vars.borderStyle,
+
+    width: vars.space,
+    height: vars.space,
   },
   shorthands: {
     padding: ["paddingTop", "paddingBottom", "paddingLeft", "paddingRight"],
     paddingX: ["paddingLeft", "paddingRight"],
     paddingY: ["paddingTop", "paddingBottom"],
 
-    margin: ["paddingTop", "paddingBottom", "paddingLeft", "paddingRight"],
-    marginX: ["paddingLeft", "paddingRight"],
-    marginY: ["paddingTop", "paddingBottom"],
+    margin: ["marginTop", "marginBottom", "marginLeft", "marginRight"],
+    marginX: ["marginLeft", "marginRight"],
+    marginY: ["marginTop", "marginBottom"],
 
     placeItems: ["justifyContent", "alignItems"],
+
+    boxSize: ["width", "height"],
   },
 });
 
 export const colorProperties = defineProperties({
   conditions: {
-    // lightMode: {},
-    // darkMode: { "@media": "(prefers-color-scheme: dark)" },
     default: {},
     hover: { selector: "&:hover" },
   },
   defaultCondition: "default",
   properties: {
-    color: colors,
-    background: colors,
-    backgroundColor: colors,
-    borderColor: colors,
+    color: vars.colors,
+    background: vars.colors,
+    backgroundColor: vars.colors,
+    borderColor: vars.colors,
   },
 });
 

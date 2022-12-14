@@ -1,11 +1,11 @@
 import { style } from "@vanilla-extract/css";
-import { space, radii, colors } from "../vars";
+import { radii, colors } from "../../vars";
 
 export const baseStyle = style([
   {
     borderRadius: radii["md"],
     border: "1px solid transparent",
-    padding: `${space["3"]} ${space["5"]}`,
+    padding: "3px 6px",
     fontSize: "1em",
     fontWeight: 500,
     fontFamily: "inherit",

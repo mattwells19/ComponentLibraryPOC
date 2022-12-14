@@ -36,4 +36,7 @@ export const space = {
   "container-md": "768px",
   "container-lg": "1024px",
   "container-xl": "1280px",
+  auto: "auto",
+  inherit: "inherit",
+  "fit-content": "fit-content",
 };

@@ -1,7 +1,7 @@
 import type { ComplexStyleRule, CSSProperties } from "@vanilla-extract/css";
 import type { ComponentPropsWithRef, ReactHTML } from "react";
 import { colorProperties, responsiveProperties, Sprinkles } from "./sprinkles.css";
-import { radii, space, colors } from "./vars";
+import * as vars from "./vars";
 
 export type HTMLProps<T extends keyof ReactHTML> = Omit<ComponentPropsWithRef<T>, keyof Sprinkles>;
 
@@ -10,7 +10,18 @@ export type TuxedoComponentProps<T extends keyof ReactHTML> = HTMLProps<T> &
   Omit<CSSProperties, keyof Sprinkles>;
 
 export const styleProps = new Set(Object.keys({ ...colorProperties.styles, ...responsiveProperties.styles }));
-export const styleValues = new Set(Object.keys({ ...radii, ...space, ...colors }));
+export const styleValues = new Set([
+  ...Object.keys({
+    ...vars.radii,
+    ...vars.space,
+    ...vars.colors,
+    ...vars.borderStyle,
+  }),
+  ...vars.alignItems,
+  ...vars.display,
+  ...vars.flexDirection,
+  ...vars.justifyContent,
+]);
 
 export const isSprinkle = (prop: string, value: string) =>
   styleProps.has(prop) && (typeof value === "object" || styleValues.has(value));

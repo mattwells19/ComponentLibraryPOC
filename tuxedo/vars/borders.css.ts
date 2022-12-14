@@ -10,17 +10,17 @@ export const radii = {
   full: "9999px",
 };
 
-export const borderStyle = {
-  none: "none",
-  hidden: "hidden",
-  dotted: "dotted",
-  dashed: "dashed",
-  solid: "solid",
-  double: "double",
-  groove: "groove",
-  ridge: "ridge",
-  inset: "inset",
-  outset: "outset",
-  initial: "initial",
-  inherit: "inherit",
-};
+export const borderStyle = [
+  "none",
+  "hidden",
+  "dotted",
+  "dashed",
+  "solid",
+  "double",
+  "groove",
+  "ridge",
+  "inset",
+  "outset",
+  "initial",
+  "inherit",
+] as const;
